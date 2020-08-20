@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  articles:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        DOCKER_GIT_CREDENTIALS: ${DOCKER_GIT_CREDENTIALS}
+        APP_PORT: ${PORT}
+    image: articles:latest
+    depends_on:
+      - articlesdb
+    volumes:
+      - ./:/root/app
+    env_file:
+      - .env
+    ports:
+      - ${HOST_PORT}:${PORT}
+  productsdb:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PWD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PWD}
+      MYSQL_DATABASE: ${DB_SCHEMA}
+    ports:
+      - ${DB_HOST_PORT}:3306

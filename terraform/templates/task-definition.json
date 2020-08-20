@@ -1,0 +1,55 @@
+[
+  {
+    "name": "${container_name}",
+    "cpu": 1024,
+    "memory": 2048,
+    "image": "${image_url}",
+    "environment": [
+      { "name": "SERVICE_NAME", "value": "${service_name}"},
+      { "name": "PORT", "value": "${container_port}"},
+      
+      { "name": "DB_HOST", "value": "${db_host}"},
+      { "name": "DB_PORT", "value": "${db_port}"},
+      { "name": "DB_USER", "value": "${db_user}"},
+      { "name": "DB_SCHEMA", "value": "${db_schema}"},
+      
+      { "name": "LOG_NAME", "value": "${log_name}"},
+      { "name": "LOG_LEVEL", "value": "${log_level}"},
+      { "name": "LOG_ENABLE_DEV", "value": "${log_enable_dev}"},
+      { "name": "LOG_STREAM_MONITORING", "value": "${log_stream_monitoring}"},
+      { "name": "LOG_STREAM_REPORTING", "value": "${log_stream_reporting}"},
+      { "name": "LOG_DISABLE_KINESIS", "value": "${log_disable_kinesis}"},
+      { "name": "LOG_FLUSH_INTERVAL", "value": "${log_flush_interval}"},
+      { "name": "LOG_BUFFER_SIZE", "value": "${log_buffer_size}"},
+      { "name": "TRACE_DESTINATION_DNS", "value": "${trace_destination_dns}"},
+      { "name": "TRACE_DESTINATION_PORT", "value": "${trace_destination_port}"},
+      { "name": "TRACE_DISABLE", "value": "${trace_disable}"},
+      { "name": "TRACE_SAMPLE_RATE", "value": "${trace_sample_rate}"},
+      { "name": "SENTRY_DSN", "value": "${sentry_dsn}"},
+      { "name": "SENTRY_ENV", "value": "${sentry_env}"},
+      { "name": "SENTRY_DISABLE", "value": "${sentry_disable}"}
+    ],
+    
+    "secrets": [
+      { "name": "DB_PWD", "valueFrom":  "${db_pwd}"},
+      { "name": "DB_MIGRATIONS_SRC", "valueFrom": "${db_migrations_src}"}
+    ],
+    
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group_name}",
+        "awslogs-region": "${log_group_region}",
+        "awslogs-stream-prefix": "${container_name}"
+      }
+    },
+    "portMappings": [
+      {
+        "hostPort": ${container_port},
+        "protocol": "tcp",
+        "containerPort": ${container_port}
+      }
+    ]
+  }
+]

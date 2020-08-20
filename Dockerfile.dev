@@ -1,0 +1,33 @@
+FROM golang:latest
+
+# ARG security: https://bit.ly/2oY3pCn
+ARG DOCKER_GIT_CREDENTIALS=default
+
+ARG APP_PORT
+
+ENV PORT=$APP_PORT
+
+RUN echo $DOCKER_GIT_CREDENTIALS
+ENV GOPRIVATE=github.com/caring
+
+# Set git credentials for private repo access
+RUN git config --global credential.helper store && echo "${DOCKER_GIT_CREDENTIALS}" > ~/.git-credentials
+
+WORKDIR /root/app
+
+COPY . /root/app
+
+
+RUN ["wget", "https://github.com/maoueh/zap-pretty/releases/download/v0.2.0/zap-pretty_0.2.0_Linux_x86_64.tar.gz"]
+
+RUN ["tar", "-zxvf", "zap-pretty_0.2.0_Linux_x86_64.tar.gz"]
+
+RUN ["rm", "zap-pretty_0.2.0_Linux_x86_64.tar.gz"]
+
+RUN ["cp", "./zap-pretty", "/usr/local/bin/"]
+
+RUN ["go", "get", "github.com/cosmtrek/air"]
+
+EXPOSE $PORT
+
+ENTRYPOINT air | zap-pretty

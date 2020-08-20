@@ -1,0 +1,52 @@
+syntax = "proto3";
+package articles;
+
+option go_package = "pb";
+
+service ArticlesService {
+  rpc Ping (PingRequest)                  returns (PingResponse);
+  rpc CreateArticle(CreateArticleRequest) returns (ArticleResponse) {}
+  rpc UpdateArticle(UpdateArticleRequest) returns (ArticleResponse) {}
+  rpc DeleteArticle(ByIDRequest)          returns (ArticleResponse) {}
+  rpc GetArticle(ByIDRequest)             returns (ArticleResponse) {}
+}
+
+// #################################
+//          Ping
+// #################################
+
+message PingRequest {
+  string data = 1;
+}
+
+message PingResponse {
+  string data = 1;
+}
+
+// #################################
+//          Shared Messages
+// #################################
+message ByIDRequest {
+  string id = 1;
+}
+
+message LoadKeyRequest {
+  repeated string keys = 1;
+}
+
+// #################################
+//          Article
+// #################################
+message ArticleResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message CreateArticleRequest {
+  string name = 1;
+}
+
+message UpdateArticleRequest {
+  string id = 1;
+  string name = 2;
+}
